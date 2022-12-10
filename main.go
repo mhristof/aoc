@@ -9,8 +9,52 @@ import (
 )
 
 func main() {
-	res := twob(read("2.input"))
+	res := threeA(read("3.input"))
 	fmt.Println(fmt.Sprintf("res: %+v %T", res, res))
+}
+
+func threeA(data []string) int {
+	var sum int
+
+	for _, backpack := range data {
+		sum += findpriority(backpack)
+	}
+
+	return sum
+}
+
+func findpriority(backpack string) int {
+	l := len(backpack)
+	first := backpack[0 : l/2]
+	secon := backpack[l/2 : l]
+	fmt.Println(fmt.Sprintf("first: %+v %T", first, first))
+	fmt.Println(fmt.Sprintf("secon: %+v %T", secon, secon))
+
+	var extra rune
+
+	for _, letter := range first {
+		found := false
+		for _, sLetter := range secon {
+			if sLetter == letter {
+				found = true
+
+				break
+			}
+		}
+
+		if found {
+			fmt.Println(fmt.Sprintf("letter: %s %T", string(letter), letter))
+			extra = letter
+
+			break
+		}
+
+	}
+
+	if extra >= 97 {
+		return int(extra) - 96
+	}
+	return int(extra) - 64 + 26
 }
 
 func twob(data []string) int {
