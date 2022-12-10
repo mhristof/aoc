@@ -6,6 +6,37 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestOverlap(t *testing.T) {
+	cases := []struct {
+		name string
+		a    []int
+		b    []int
+		res  bool
+	}{
+		{
+			name: "no overlap",
+			a:    sectionsToInt("2-4"),
+			b:    sectionsToInt("6-8"),
+		},
+		{
+			name: "overlap 2-8",
+			a:    sectionsToInt("2-8"),
+			b:    sectionsToInt("3-7"),
+			res:  true,
+		},
+		{
+			name: "overlap 6-6",
+			a:    sectionsToInt("6-6"),
+			b:    sectionsToInt("4-6"),
+			res:  true,
+		},
+	}
+
+	for _, test := range cases {
+		assert.Equal(t, test.res, overlap(test.a, test.b), test.name)
+	}
+}
+
 func Test3b(t *testing.T) {
 	cases := []struct {
 		name     string

@@ -9,8 +9,58 @@ import (
 )
 
 func main() {
-	res := threeB(read("3.input"))
+	res := fourA(read("4.input"))
 	fmt.Println(fmt.Sprintf("res: %+v %T", res, res))
+}
+
+func fourA(data []string) int {
+	var counter int
+
+	for _, team := range data {
+		fields := strings.Split(team, ",")
+		if overlap(sectionsToInt(fields[0]), sectionsToInt(fields[1])) {
+			counter++
+		}
+	}
+
+	return counter
+}
+
+func overlap(a, b []int) bool {
+	overlap := 0
+	// fmt.Println(fmt.Sprintf("a: %+v %T", a, a))
+	// fmt.Println(fmt.Sprintf("b: %+v %T", b, b))
+	for _, first := range a {
+		for _, second := range b {
+			if first == second {
+				overlap += 1
+			}
+		}
+	}
+
+	// fmt.Println(fmt.Sprintf("overlap: %+v %T", overlap, overlap))
+
+	return overlap >= len(a) || overlap >= len(b)
+}
+
+func sectionsToInt(section string) []int {
+	fields := strings.Split(section, "-")
+
+	start, err := strconv.Atoi(fields[0])
+	if err != nil {
+		panic(err)
+	}
+
+	stop, err := strconv.Atoi(fields[1])
+	if err != nil {
+		panic(err)
+	}
+
+	var ret []int
+	for i := start; i <= stop; i++ {
+		ret = append(ret, i)
+	}
+	return ret
 }
 
 func threeB(data []string) int {
