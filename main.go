@@ -9,6 +9,80 @@ import (
 )
 
 func main() {
+	res := two(read("2.input"))
+	fmt.Println(fmt.Sprintf("res: %+v %T", res, res))
+}
+
+func two(data []string) int {
+	scores := map[string]int{
+		"rock":     1,
+		"papper":   2,
+		"scissors": 3,
+	}
+
+	translate := map[string]string{
+		"A": "X",
+		"B": "Y",
+		"C": "Z",
+	}
+
+	words := map[string]string{
+		"X": "rock",
+		"Y": "papper",
+		"Z": "scissors",
+		"A": "rock",
+		"B": "papper",
+		"C": "scissors",
+	}
+
+	score := 0
+	for _, game := range data {
+		fields := strings.Fields(game)
+
+		// fmt.Println(fmt.Sprintf("game: %+v %T", game, game))
+		// fmt.Println(fmt.Sprintf("fields: %+v %T", fields, fields))
+
+		them := words[translate[fields[0]]]
+		me := words[fields[1]]
+
+		oldScore := score
+		res := ""
+
+		switch {
+		case them == me:
+			score += scores[me] + 3
+			res = "draw"
+		case me == "papper" && them != "scissors":
+			score += scores[me] + 6
+			res = "win"
+		case me == "rock" && them != "papper":
+			score += scores[me] + 6
+			res = "win"
+		case me == "scissors" && them != "rock":
+			score += scores[me] + 6
+			res = "win"
+		default:
+			score += scores[me]
+			res = "lost"
+		}
+
+		// fmt.Println(fmt.Sprintf("them: %+v %T", them, them))
+		fmt.Println(fmt.Sprintf("game: %s %s %s %d %d", them, me, res, score-oldScore, score))
+	}
+	fmt.Println(fmt.Sprintf("score: %+v %T", score, score))
+	return score
+}
+
+func read(path string) []string {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	return strings.Split(string(data), "\n")
+}
+
+func part1() {
 	data, err := os.ReadFile("1.input")
 	if err != nil {
 		panic(err)
