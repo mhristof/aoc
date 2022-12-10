@@ -9,8 +9,62 @@ import (
 )
 
 func main() {
-	res := two(read("2.input"))
+	res := twob(read("2.input"))
 	fmt.Println(fmt.Sprintf("res: %+v %T", res, res))
+}
+
+func twob(data []string) int {
+	scores := map[string]int{
+		"rock":     1,
+		"papper":   2,
+		"scissors": 3,
+		"win":      6,
+		"lost":     0,
+		"draw":     3,
+	}
+
+	words := map[string]string{
+		"X": "lost",
+		"Y": "draw",
+		"Z": "win",
+		"A": "rock",
+		"B": "papper",
+		"C": "scissors",
+	}
+
+	score := 0
+	for _, game := range data {
+		fields := strings.Fields(game)
+
+		them := words[fields[0]]
+		result := words[fields[1]]
+
+		oldScore := score
+		me := ""
+
+		switch {
+		case result == "draw":
+			me = them
+		case result == "win" && them == "papper":
+			me = "scissors"
+		case result == "win" && them == "rock":
+			me = "papper"
+		case result == "win" && them == "scissors":
+			me = "rock"
+		case result == "lost" && them == "papper":
+			me = "rock"
+		case result == "lost" && them == "rock":
+			me = "scissors"
+		case result == "lost" && them == "scissors":
+			me = "papper"
+		}
+
+		score += scores[me] + scores[result]
+
+		fmt.Println(fmt.Sprintf("game: %s %s %s %d %d", them, me, result, score-oldScore, score))
+	}
+	fmt.Println(fmt.Sprintf("score: %+v %T", score, score))
+	return score
 }
 
 func two(data []string) int {
