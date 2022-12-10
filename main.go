@@ -9,8 +9,44 @@ import (
 )
 
 func main() {
-	res := threeA(read("3.input"))
+	res := threeB(read("3.input"))
 	fmt.Println(fmt.Sprintf("res: %+v %T", res, res))
+}
+
+func threeB(data []string) int {
+	backpacks := make([]string, 3)
+	prio := 0
+	for i, line := range data {
+		backpacks[i%3] = line
+		if i%3 == 2 {
+			prio += findBadgePriority(backpacks[0], backpacks[1], backpacks[2])
+			fmt.Println(fmt.Sprintf("backpacks: %+v %T", backpacks, backpacks))
+		}
+	}
+	return prio
+}
+
+func findBadgePriority(a, b, c string) int {
+	for _, first := range a {
+		for _, second := range b {
+			for _, third := range c {
+				if first == second && second == third {
+					return runePriority(first)
+				}
+			}
+		}
+	}
+	fmt.Println(fmt.Sprintf("a: %+v %T", a, a))
+	fmt.Println(fmt.Sprintf("b: %+v %T", b, b))
+	fmt.Println(fmt.Sprintf("c: %+v %T", c, c))
+	panic("panic!")
+}
+
+func runePriority(in rune) int {
+	if in >= 97 {
+		return int(in) - 96
+	}
+	return int(in) - 64 + 26
 }
 
 func threeA(data []string) int {
@@ -51,10 +87,7 @@ func findpriority(backpack string) int {
 
 	}
 
-	if extra >= 97 {
-		return int(extra) - 96
-	}
-	return int(extra) - 64 + 26
+	return runePriority(extra)
 }
 
 func twob(data []string) int {

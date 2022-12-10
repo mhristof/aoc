@@ -6,6 +6,37 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test3b(t *testing.T) {
+	cases := []struct {
+		name     string
+		in       []string
+		priority int
+	}{
+		{
+			name: "first",
+			in: []string{
+				"vJrwpWtwJgWrhcsFMMfFFhFp",
+				"jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+				"PmmdzqPrVvPwwTWBwg",
+			},
+			priority: 18,
+		},
+		{
+			name: "second",
+			in: []string{
+				"wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+				"ttgJtRGJQctTZtZT",
+				"CrZsJsPPZsGzwwsLwLmpwMDw",
+			},
+			priority: 52,
+		},
+	}
+
+	for _, test := range cases {
+		assert.Equal(t, test.priority, findBadgePriority(test.in[0], test.in[1], test.in[2]), test.name)
+	}
+}
+
 func TestFindPriority(t *testing.T) {
 	cases := []struct {
 		name     string
