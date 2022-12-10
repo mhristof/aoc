@@ -1,9 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -19,10 +19,11 @@ func main() {
 	count := 1
 	maxCal := 0
 	maxElv := 0
-	for _, calories := range strings.Split(string(data), "\n") {
-		fmt.Println(fmt.Sprintf("calories: %+v %T", calories, calories))
+	var keys []int
 
+	for _, calories := range strings.Split(string(data), "\n") {
 		if calories == "" {
+			keys = append(keys, count)
 			count++
 			continue
 		}
@@ -38,14 +39,19 @@ func main() {
 			maxCal = elves[count]
 			maxElv = count
 		}
+
 	}
 
-	// dont forget to import "encoding/json"
-	elvesJSON, err := json.MarshalIndent(elves, "", "    ")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(elvesJSON))
+	fmt.Println(fmt.Sprintf("keys: %+v %T", keys, keys))
+
+	sort.SliceStable(keys, func(i, j int) bool {
+		return elves[keys[i]] > elves[keys[j]]
+	})
+
+	fmt.Println(fmt.Sprintf("elves: %+v %T", elves, elves))
+	fmt.Println(fmt.Sprintf("keys[0:3]: %+v %T", keys[0:3], keys[0:3]))
+	part2 := elves[keys[0]] + elves[keys[1]] + elves[keys[2]]
+	fmt.Println(fmt.Sprintf("part2: %+v %T", part2, part2))
 
 	fmt.Println(fmt.Sprintf("maxCal: %+v %T", maxCal, maxCal))
 	fmt.Println(fmt.Sprintf("maxElv: %+v %T", maxElv, maxElv))
