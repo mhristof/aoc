@@ -9,16 +9,16 @@ import (
 )
 
 func main() {
-	res := fourA(read("4.input"))
+	res := fourAb(read("4.input"))
 	fmt.Println(fmt.Sprintf("res: %+v %T", res, res))
 }
 
-func fourA(data []string) int {
+func fourAb(data []string) int {
 	var counter int
 
 	for _, team := range data {
 		fields := strings.Split(team, ",")
-		if overlap(sectionsToInt(fields[0]), sectionsToInt(fields[1])) {
+		if overlap(sectionsToInt(fields[0]), sectionsToInt(fields[1]), false) {
 			counter++
 		}
 	}
@@ -26,7 +26,20 @@ func fourA(data []string) int {
 	return counter
 }
 
-func overlap(a, b []int) bool {
+func fourA(data []string) int {
+	var counter int
+
+	for _, team := range data {
+		fields := strings.Split(team, ",")
+		if overlap(sectionsToInt(fields[0]), sectionsToInt(fields[1]), true) {
+			counter++
+		}
+	}
+
+	return counter
+}
+
+func overlap(a, b []int, all bool) bool {
 	overlap := 0
 	// fmt.Println(fmt.Sprintf("a: %+v %T", a, a))
 	// fmt.Println(fmt.Sprintf("b: %+v %T", b, b))
@@ -40,7 +53,10 @@ func overlap(a, b []int) bool {
 
 	// fmt.Println(fmt.Sprintf("overlap: %+v %T", overlap, overlap))
 
-	return overlap >= len(a) || overlap >= len(b)
+	if all {
+		return overlap >= len(a) || overlap >= len(b)
+	}
+	return overlap > 0
 }
 
 func sectionsToInt(section string) []int {

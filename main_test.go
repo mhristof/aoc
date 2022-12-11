@@ -11,29 +11,47 @@ func TestOverlap(t *testing.T) {
 		name string
 		a    []int
 		b    []int
+		all  bool
 		res  bool
 	}{
 		{
 			name: "no overlap",
 			a:    sectionsToInt("2-4"),
 			b:    sectionsToInt("6-8"),
+			all:  true,
 		},
 		{
 			name: "overlap 2-8",
 			a:    sectionsToInt("2-8"),
 			b:    sectionsToInt("3-7"),
 			res:  true,
+			all:  true,
 		},
 		{
 			name: "overlap 6-6",
 			a:    sectionsToInt("6-6"),
 			b:    sectionsToInt("4-6"),
 			res:  true,
+			all:  true,
+		},
+		{
+			name: "overlap partially 5-7",
+			a:    sectionsToInt("5-7"),
+			b:    sectionsToInt("7-9"),
+			all:  false,
+			res:  true,
+		},
+		{
+			name: "overlap partially 6-6,4-6",
+			a:    sectionsToInt("6-6"),
+			b:    sectionsToInt("4-6"),
+			all:  false,
+			res:  true,
 		},
 	}
 
 	for _, test := range cases {
-		assert.Equal(t, test.res, overlap(test.a, test.b), test.name)
+		assert.Equal(t, test.res, overlap(test.a, test.b, test.all), test.name)
 	}
 }
 
