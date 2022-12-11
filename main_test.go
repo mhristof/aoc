@@ -6,6 +6,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestFiveA(t *testing.T) {
+	cases := []struct {
+		name   string
+		stacks map[int][]string
+		moves  []string
+		res    string
+	}{
+		{
+			name: "example",
+			stacks: map[int][]string{
+				1: {"Z", "N"},
+				2: {"M", "C", "D"},
+				3: {"P"},
+			},
+			moves: []string{
+				"move 1 from 2 to 1",
+				"move 3 from 1 to 3",
+				"move 2 from 2 to 1",
+				"move 1 from 1 to 2",
+			},
+			res: "CMZ",
+		},
+	}
+
+	for _, test := range cases {
+		assert.Equal(t, test.res, fiveA(test.moves, test.stacks), test.name)
+	}
+}
+
 func TestOverlap(t *testing.T) {
 	cases := []struct {
 		name string

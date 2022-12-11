@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"sort"
@@ -9,8 +10,65 @@ import (
 )
 
 func main() {
-	res := fourAb(read("4.input"))
+	res := fiveA(read("5.input"), map[int][]string{})
 	fmt.Println(fmt.Sprintf("res: %+v %T", res, res))
+}
+
+func fiveA(data []string, stacks map[int][]string) string {
+	if len(stacks) == 0 {
+		stacks = map[int][]string{
+			1: strings.Fields("S L W"),
+			2: strings.Fields("J T N Q"),
+			3: strings.Fields("S C H F J"),
+			4: strings.Fields("T R M W N G B"),
+			5: strings.Fields("T R L S D H Q B"),
+			6: strings.Fields("M J B V F H R L"),
+			7: strings.Fields("D W R N J M"),
+			8: strings.Fields("B Z T F H N D J"),
+			9: strings.Fields("H L Q N B F T"),
+		}
+	}
+	for _, move := range data[10:] {
+		fmt.Println(fmt.Sprintf("move: %+v %T", move, move))
+		fields := strings.Fields(move)
+		moveI := []int{atoi(fields[1]), atoi(fields[3]), atoi(fields[5])}
+		stacks = moveStacks(stacks, moveI)
+	}
+
+	// dont forget to import "encoding/json"
+	stacksJSON, err := json.MarshalIndent(stacks, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(stacksJSON))
+
+	var ret []string
+	for i := 1; i <= len(stacks); i++ {
+		last := stacks[i][len(stacks[i])-1]
+		ret = append(ret, last)
+	}
+
+	// fmt.Println(fmt.Sprintf("ret: %+v %T", ret, ret))
+
+	return strings.Join(ret, "")
+}
+
+func moveStacks(stacks map[int][]string, moves []int) map[int][]string {
+	for i := 0; i < moves[0]; i++ {
+		srcLen := len(stacks[moves[1]])
+		moved := stacks[moves[1]][srcLen-1]
+		stacks[moves[1]] = stacks[moves[1]][:srcLen-1]
+		stacks[moves[2]] = append(stacks[moves[2]], moved)
+	}
+	return stacks
+}
+
+func atoi(in string) int {
+	number, err := strconv.Atoi(in)
+	if err != nil {
+		panic(err)
+	}
+	return number
 }
 
 func fourAb(data []string) int {
